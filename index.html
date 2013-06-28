@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Bingo!</title>
+	<link rel="stylesheet" href="./css/bootstrap.css">
+	<style>
+		body {
+			padding-top: 100px;
+		}
+		.bingo {
+			text-align: center;
+			font-size: 256px;
+			line-height: 300px;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="alert bingo">
+			<span id="bingo">0</span>
+		</div>
+		<p>
+			<button id="start" class="btn btn-large btn-primary btn-block">Start!</button>
+		</p>
+		<div>
+			min: <input class="input-mini" id="min" type="text" value="100">
+			max: <input class="input-mini" id="max" type="text" value="999">
+		</div>
+	</div>
+	<script src="./js/jquery.js"></script>
+	<script>
+		$(function() {
+			$('#start').click(function() {
+				var bingo,
+					min = parseInt($('#min').val()),
+					max = parseInt($('#max').val()),
+					wait = Math.floor((Math.random() * 60) + 40),
+					stop = Math.floor((Math.random() * 10) + 1),
+					diff = Math.floor((Math.random() * 3) + 1),
+					loop = function() {
+						bingo = Math.floor((Math.random() * max) + min);
+						$('#bingo').text(bingo);
+					},
+					countup = function() {
+						bingo = parseInt($('#bingo').text()) + 1;
+						if (bingo > max) {
+							bingo = min;
+						}
+						$('#bingo').text(bingo);
+					},
+					countupSp = function() {
+						$('.bingo').animate({
+							fontSize: "512px"
+						}, 300).animate({
+							fontSize: "128px"
+						}, 700, countup);
+					},
+					countRand = function() {
+						bingo = parseInt($('#bingo').text()) + (diff - 2);
+						if (bingo > max) {
+							bingo = min;
+						}
+						if (bingo < min) {
+							bingo = max;
+						}
+						$('#bingo').text(bingo);
+					};
+
+				$('.bingo').css('font-size', '256px').removeClass('alert-error').addClass('alert-info');
+
+				for (var i = 1; i <= 500; i++) {
+					setTimeout(loop, i * 10);
+				};
+				for (var i = 1; i <= wait; i++) {
+					setTimeout(countup, 100 * i + 500 * 10);
+				};
+				for (var i = 1; i <= stop; i++) {
+					setTimeout(countupSp, 1000 * i + 500 * 10 + 100 * wait);
+				};
+				setTimeout(function() {
+					$('.bingo').animate({
+						fontSize: "512px"
+					}, 300).animate({
+						fontSize: "64px"
+					}, 3000, countRand).animate({
+						fontSize: "512px"
+					}, 300, function() {
+						$(this).removeClass('alert-info').addClass('alert-error');
+					}).animate({
+						fontSize: "256px"
+					}, 700);
+				}, 1000 + 1000 * stop + 500 * 10 + 100 * wait)
+			});
+		});
+	</script>
+</body>
+</html>
