@@ -1,0 +1,5 @@
+# Bingo!
+
+ビンゴくじ
+
+MIT License
